@@ -23,7 +23,10 @@ class User extends Authenticatable
         'password',
         'nationality',
         'phone',
-        'dob'
+        'dob',
+        'role',
+        'batting',
+        'bowling'
     ];
 
     /**

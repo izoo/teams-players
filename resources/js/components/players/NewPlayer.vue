@@ -77,18 +77,19 @@
                         </div>
                         <div class="col-md-6">
                             <label for="name" class="form-label"
-                                >Baffing Style</label
+                                >Batting Style</label
                             >
                             <div class="input-group">
                                 <span class="input-group-text"
-                                    ><i class="bx bx-calendar"></i
-                                ></span>
-                                <input
-                                    type="text"
-                                    v-model="dob"
-                                    class="form-control border-start-0"
-                                    id="name"
-                                />
+                                    ></span>
+                                <select class="form-control border-start-0" v-model="batting">
+                                    <option value="" disabled>Select Batting Style</option>
+                                    <option value="Right Hand">Right Hand Batting</option>
+                                    <option value="Left Hand">Left Hand Batting</option>
+
+
+
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -97,14 +98,17 @@
                             >
                             <div class="input-group">
                                 <span class="input-group-text"
-                                    ><i class="bx bx-calendar"></i
-                                ></span>
-                                <input
-                                    type="text"
-                                    v-model="dob"
-                                    class="form-control border-start-0"
-                                    id="name"
-                                />
+                                    ></span>
+                                 <select class="form-control border-start-0" v-model="bowling">
+                                    <option value="" disabled>Select Bowling Style</option>
+                                    <option value="Left Arm Fast">Left Arm Fast</option>
+                                    <option value="Right Arm Off Spin">Right Arm Off Spin</option>
+                                    <option value="Right Arm Off Spin">Right Arm Leg Spin</option>
+                                    <option value="Left Arm Orthodox">Left Arm Orthodox</option>
+                                    <option value="Left Arm Chinaman">Left Arm Chinaman</option>
+
+
+                                </select>
                             </div>
                         </div>
                         <div class="col-12 clearfix">
@@ -154,11 +158,8 @@ export default {
             phone: "",
             dob: "",
             nationality:"",
-            sub_nationality:"",
-            budget:"",
-            financial_year:"",
-            department_id:"",
-            status:""
+            batting:"",
+            bowling:"",
         };
     },
     methods: {
@@ -168,30 +169,34 @@ export default {
             this.phone = "";
             this.dob = "";
             this.nationality="";
-
+            this.batting="",
+            this.bowling=""
         },
         addPlayer(e) {
             e.preventDefault();
-            alert("New Admin Successfully Added");
-            // let password="$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi";
-            // let obj = {
-            //     name: this.name,
-            //     email: this.email,
-            //     phone: this.phone,
-            //     dob: this.dob,
-            //     nationality:this.nationality,
-            //     password:password
-            // };
-            // // let currentObj = this;
-            // // this.sendData = true;
-            // axios.post("api/players", obj).then((response) => {
-            //     if (response.data.status == "success") {
-            //         alert("New Admin Successfully Added");
-            //         this.clearFormData();
-            //     } else {
-            //         alert("Error Saving Data Please Try Again Later");
-            //     }
-            // });
+            //alert("New Admin Successfully Added");
+            let password="$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi";
+            let obj = {
+                name: this.name,
+                email: this.email,
+                phone: this.phone,
+                dob: this.dob,
+                nationality:this.nationality,
+                password:password,
+                batting:this.batting,
+                bowling:this.bowling,
+                role:"player"
+            };
+            // let currentObj = this;
+            // this.sendData = true;
+            axios.post("api/players", obj).then((response) => {
+                if (response.data.status == "success") {
+                    alert("New Palyer Successfully Added");
+                    this.clearFormData();
+                } else {
+                    alert("Error Saving Data Please Try Again Later");
+                }
+            });
         },
     },
 };

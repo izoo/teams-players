@@ -3,7 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminClubController;
-use App\Http\Controllers\OrdersController;
+
+use App\Http\Controllers\PlayersController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,7 +29,9 @@ Route::get('admin-clubs',[AdminClubController::class,'index']);
 Route::put('admin-clubs/{id}',[AdminClubController::class,'update']);
 Route::delete('admin-clubs/{id}',[AdminClubController::class,'delete']);
 // Order Routes
-Route::get('players',[OrdersController::class,'index']);
-Route::put('players/{id}',[OrdersController::class,'update']);
+Route::post('players',[PlayersController::class,'create']);
+Route::put('players/{id}',[PlayersController::class,'update']);
+Route::get('players',[PlayersController::class,'index']);
+Route::delete('players/{id}',[PlayersController::class,'delete']);
 
 

@@ -19,7 +19,7 @@
 										<tr>
 											<th>#</th>
 											<th>Name </th>
-                                            <th>Baffing Style</th>
+                                            <th>Batting Style</th>
 											<th>Bowling Style</th>
 											<th>Phone</th>
 											<th>Date Of Birth</th>
@@ -29,22 +29,23 @@
 										</tr>
 									</thead>
 									<tbody>
-										<!-- <tr v-for="(admin,index) in admins" :key="admin.id">
+										<tr v-for="(player,index) in players" :key="player.id">
 											<td>{{index++}}</td>
 											<td>
-												{{admin.name}}
+												{{player.name}}
 											</td>
-											<td>{{admin.email}}</td>
-											<td>{{admin.phone}}</td>
-											<td>{{admin.dob}}</td>
+											<td>{{player.batting}}</td>
+											<td>{{player.bowling}}</td>
+                                            <td>{{player.phone}}</td>
+											<td>{{player.dob}}</td>
 											<td>
-												{{admin.nationality}}
+												{{player.nationality}}
 											</td>
 											<td>
-												{{admin.created_at}}
+												{{player.created_at}}
 											</td>
 
-										</tr> -->
+										</tr>
 
 									</tbody>
 								</table>
@@ -56,7 +57,7 @@
 export default {
 	data(){
 		 return {
-          admins:[],
+          players:[],
 		  displayEditForm:false,
 		  	admin_no_plate:"",
 			capacity:"",
@@ -67,11 +68,11 @@ export default {
 	},
 	methods:
 	{
-		fetchAdmins()
+		fetchPlayers()
 		{
 			//Get Projects List from the api
 			axios.get('api/players').then(response => {
-				this.admins=response.data
+				this.players=response.data.filter((item)=>item.role==="player")
 			})
 		},
 		editadmin(key,no_plate,capacity,status,model)
@@ -145,7 +146,7 @@ export default {
 	},
 	created()
 	{
-		this.fetchAdmins();
+		this.fetchPlayers();
 	}
 }
 </script>

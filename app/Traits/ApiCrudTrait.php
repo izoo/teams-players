@@ -29,7 +29,11 @@ trait ApiCrudTrait
          $result->update(['password'=>bcrypt($random_password)]);
          $name= $result->name;
          $email= $result->email;
-         Mail::to($email)->send(new WelcomeMail($name,$email,$random_password));
+         if($this->model()==="App\Models\User")
+         {
+            Mail::to($email)->send(new WelcomeMail($name,$email,$random_password));
+
+         }
 
          $result ? $status="success" : $status="error";
          return response()->json(['status'=>$status, 'results'=> $result]);

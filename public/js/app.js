@@ -5962,6 +5962,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5970,11 +5974,8 @@ __webpack_require__.r(__webpack_exports__);
       phone: "",
       dob: "",
       nationality: "",
-      sub_nationality: "",
-      budget: "",
-      financial_year: "",
-      department_id: "",
-      status: ""
+      batting: "",
+      bowling: ""
     };
   },
   methods: {
@@ -5984,28 +5985,36 @@ __webpack_require__.r(__webpack_exports__);
       this.phone = "";
       this.dob = "";
       this.nationality = "";
+      this.batting = "", this.bowling = "";
     },
     addPlayer: function addPlayer(e) {
-      e.preventDefault();
-      alert("New Admin Successfully Added"); // let password="$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi";
-      // let obj = {
-      //     name: this.name,
-      //     email: this.email,
-      //     phone: this.phone,
-      //     dob: this.dob,
-      //     nationality:this.nationality,
-      //     password:password
-      // };
-      // // let currentObj = this;
-      // // this.sendData = true;
-      // axios.post("api/players", obj).then((response) => {
-      //     if (response.data.status == "success") {
-      //         alert("New Admin Successfully Added");
-      //         this.clearFormData();
-      //     } else {
-      //         alert("Error Saving Data Please Try Again Later");
-      //     }
-      // });
+      var _this = this;
+
+      e.preventDefault(); //alert("New Admin Successfully Added");
+
+      var password = "$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi";
+      var obj = {
+        name: this.name,
+        email: this.email,
+        phone: this.phone,
+        dob: this.dob,
+        nationality: this.nationality,
+        password: password,
+        batting: this.batting,
+        bowling: this.bowling,
+        role: "player"
+      }; // let currentObj = this;
+      // this.sendData = true;
+
+      axios.post("api/players", obj).then(function (response) {
+        if (response.data.status == "success") {
+          alert("New Palyer Successfully Added");
+
+          _this.clearFormData();
+        } else {
+          alert("Error Saving Data Please Try Again Later");
+        }
+      });
     }
   }
 });
@@ -6077,10 +6086,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      admins: [],
+      players: [],
       displayEditForm: false,
       admin_no_plate: "",
       capacity: "",
@@ -6090,12 +6100,14 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    fetchAdmins: function fetchAdmins() {
+    fetchPlayers: function fetchPlayers() {
       var _this = this;
 
       //Get Projects List from the api
       axios.get('api/players').then(function (response) {
-        _this.admins = response.data;
+        _this.players = response.data.filter(function (item) {
+          return item.role === "player";
+        });
       });
     },
     editadmin: function editadmin(key, no_plate, capacity, status, model) {
@@ -6158,7 +6170,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.fetchAdmins();
+    this.fetchPlayers();
   }
 });
 
@@ -29963,33 +29975,54 @@ var render = function () {
                   _c(
                     "label",
                     { staticClass: "form-label", attrs: { for: "name" } },
-                    [_vm._v("Baffing Style")]
+                    [_vm._v("Batting Style")]
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "input-group" }, [
-                    _vm._m(4),
+                    _c("span", { staticClass: "input-group-text" }),
                     _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.dob,
-                          expression: "dob",
-                        },
-                      ],
-                      staticClass: "form-control border-start-0",
-                      attrs: { type: "text", id: "name" },
-                      domProps: { value: _vm.dob },
-                      on: {
-                        input: function ($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.dob = $event.target.value
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.batting,
+                            expression: "batting",
+                          },
+                        ],
+                        staticClass: "form-control border-start-0",
+                        on: {
+                          change: function ($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function (o) {
+                                return o.selected
+                              })
+                              .map(function (o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.batting = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          },
                         },
                       },
-                    }),
+                      [
+                        _c("option", { attrs: { value: "", disabled: "" } }, [
+                          _vm._v("Select Batting Style"),
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "Right Hand" } }, [
+                          _vm._v("Right Hand Batting"),
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "Left Hand" } }, [
+                          _vm._v("Left Hand Batting"),
+                        ]),
+                      ]
+                    ),
                   ]),
                 ]),
                 _vm._v(" "),
@@ -30001,29 +30034,70 @@ var render = function () {
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "input-group" }, [
-                    _vm._m(5),
+                    _c("span", { staticClass: "input-group-text" }),
                     _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.dob,
-                          expression: "dob",
-                        },
-                      ],
-                      staticClass: "form-control border-start-0",
-                      attrs: { type: "text", id: "name" },
-                      domProps: { value: _vm.dob },
-                      on: {
-                        input: function ($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.dob = $event.target.value
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.bowling,
+                            expression: "bowling",
+                          },
+                        ],
+                        staticClass: "form-control border-start-0",
+                        on: {
+                          change: function ($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function (o) {
+                                return o.selected
+                              })
+                              .map(function (o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.bowling = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          },
                         },
                       },
-                    }),
+                      [
+                        _c("option", { attrs: { value: "", disabled: "" } }, [
+                          _vm._v("Select Bowling Style"),
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "Left Arm Fast" } }, [
+                          _vm._v("Left Arm Fast"),
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "option",
+                          { attrs: { value: "Right Arm Off Spin" } },
+                          [_vm._v("Right Arm Off Spin")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "option",
+                          { attrs: { value: "Right Arm Off Spin" } },
+                          [_vm._v("Right Arm Leg Spin")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "option",
+                          { attrs: { value: "Left Arm Orthodox" } },
+                          [_vm._v("Left Arm Orthodox")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "option",
+                          { attrs: { value: "Left Arm Chinaman" } },
+                          [_vm._v("Left Arm Chinaman")]
+                        ),
+                      ]
+                    ),
                   ]),
                 ]),
                 _vm._v(" "),
@@ -30033,7 +30107,7 @@ var render = function () {
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "input-group" }, [
-                    _vm._m(6),
+                    _vm._m(4),
                     _vm._v(" "),
                     _c(
                       "select",
@@ -30088,7 +30162,7 @@ var render = function () {
                   ]),
                 ]),
                 _vm._v(" "),
-                _vm._m(7),
+                _vm._m(5),
               ]
             ),
           ]),
@@ -30120,22 +30194,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "input-group-text" }, [
       _c("i", { staticClass: "bx bx-phone" }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "input-group-text" }, [
-      _c("i", { staticClass: "bx bx-calendar" }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "input-group-text" }, [
-      _c("i", { staticClass: "bx bx-calendar" }),
     ])
   },
   function () {
@@ -30203,7 +30261,53 @@ var render = function () {
           _vm._v(" "),
           _c("hr"),
           _vm._v(" "),
-          _vm._m(1),
+          _c("div", { staticClass: "table-responsive" }, [
+            _c("table", { staticClass: "table align-middle mb-0" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.players, function (player, index) {
+                  return _c("tr", { key: player.id }, [
+                    _c("td", [_vm._v(_vm._s(index++))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        "\n\t\t\t\t\t\t\t\t\t\t\t\t" +
+                          _vm._s(player.name) +
+                          "\n\t\t\t\t\t\t\t\t\t\t\t"
+                      ),
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(player.batting))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(player.bowling))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(player.phone))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(player.dob))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        "\n\t\t\t\t\t\t\t\t\t\t\t\t" +
+                          _vm._s(player.nationality) +
+                          "\n\t\t\t\t\t\t\t\t\t\t\t"
+                      ),
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        "\n\t\t\t\t\t\t\t\t\t\t\t\t" +
+                          _vm._s(player.created_at) +
+                          "\n\t\t\t\t\t\t\t\t\t\t\t"
+                      ),
+                    ]),
+                  ])
+                }),
+                0
+              ),
+            ]),
+          ]),
         ])
       : _vm._e(),
   ])
@@ -30229,29 +30333,23 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "table-responsive" }, [
-      _c("table", { staticClass: "table align-middle mb-0" }, [
-        _c("thead", { staticClass: "table-light" }, [
-          _c("tr", [
-            _c("th", [_vm._v("#")]),
-            _vm._v(" "),
-            _c("th", [_vm._v("Name ")]),
-            _vm._v(" "),
-            _c("th", [_vm._v("Baffing Style")]),
-            _vm._v(" "),
-            _c("th", [_vm._v("Bowling Style")]),
-            _vm._v(" "),
-            _c("th", [_vm._v("Phone")]),
-            _vm._v(" "),
-            _c("th", [_vm._v("Date Of Birth")]),
-            _vm._v(" "),
-            _c("th", [_vm._v("Nationality")]),
-            _vm._v(" "),
-            _c("th", [_vm._v("Date Registered")]),
-          ]),
-        ]),
+    return _c("thead", { staticClass: "table-light" }, [
+      _c("tr", [
+        _c("th", [_vm._v("#")]),
         _vm._v(" "),
-        _c("tbody"),
+        _c("th", [_vm._v("Name ")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Batting Style")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Bowling Style")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Phone")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Date Of Birth")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Nationality")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Date Registered")]),
       ]),
     ])
   },
